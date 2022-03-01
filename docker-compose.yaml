@@ -13,5 +13,16 @@ services:
     restart: always
     networks:
       - myNet
+  test-db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: dev
+    ports:
+      - 5435:5432
+    restart: always
+    networks:
+      - myNet
 networks:
   myNet:
