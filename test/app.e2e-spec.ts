@@ -143,9 +143,9 @@ describe('AppController (e2e)', () => {
   describe('bookmark', () => {
     describe('create one for user', () => {
       it('should create bookmark', async () => {
-        await pactum
+        return pactum
           .spec()
-          .post('/bookmarks')
+          .post('/bookmarks/create')
           .withHeaders('Authorization', 'Bearer $S{token}')
           .withBody({
             url: 'https://www.google.com',
@@ -155,13 +155,29 @@ describe('AppController (e2e)', () => {
       });
     });
 
-    describe('get all for user', () => {});
+    describe('get all for user', () => {
+      it ("should fail to get all bookmars", () => {
+        return pactum.spec().get('/bookmarks').expectStatus(HttpStatus.UNAUTHORIZED);
+      });
 
-    describe('get by id for user', () => {});
+      it ("should get all bookmars", () => {
+        return pactum.spec().get('/bookmarks').withHeaders('Authorization', 'Bearer $S{token}').expectStatus(HttpStatus.OK).expectBodyContains('https://www.google.com').stores('bookmarkId', 'id');
+      });
+    });
 
-    describe('edit', () => {});
+    describe('get by id for user', () => {
+      it ("should get", () => {
+        return pactum.spec().get('/bookmarks').withPathParams('id', 'Bearer $S{bookmarkId}').withHeaders('Authorization', 'Bearer $S{token}').expectStatus(HttpStatus.OK).expectBodyContains('https://www.google.com');
+      });
+    });
 
-    describe('delete', () => {});
+    describe('edit', () => {
+
+    });
+
+    describe('delete', () => {
+
+    });
   });
 
   // it('/ (GET)', () => {
